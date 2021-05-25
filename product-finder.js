@@ -1,41 +1,18 @@
-chrome.tabs.query({
-    active: true,
-    currentWindow: true
-}, function(tabs) {
+chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+    if (tabs[0].url.search('/dp/') !== -1 || tabs[0].url.search('/ip/') !== -1 || tabs[0].url.search('/p/') !== -1){
+        var productTitle = tabs[0].title;   //title
 
-    var tabHref = tabs[0].url;
-    var productTitle = ''
+        productTitle = productTitle.replace('Amazon.com', '')
+        productTitle = productTitle.replace('Target', '')
+        productTitle = productTitle.replace('Walmart.com - ', '')
+        productTitle = productTitle.replace('Walmart.com', '')
 
-    if(tabHref.search('walmart.com/ip/') !== -1){
-        for(var i = tabHref.search('ip/') + 2; i++;){
-            if (tabHref[i] === '/'){break}
-            productTitle = productTitle + tabHref[i]
-        }
-        
-    }
-    else if(tabHref.search('target.com/p/') !== -1){
-        for(var i = tabHref.search('/p/') + 2; i++;){
-            if (tabHref[i] === '/'){break}
-            productTitle = productTitle + tabHref[i]
-        }
-        
-    }
-    
-    else if(tabHref.search('amazon.com/') !== -1){
-        if(tabHref.search('/dp/') !== -1){
-            for(var i = tabHref.search('com/') + 3; i++;){
-                if (tabHref[i] === '/'){break}
-                productTitle = productTitle + tabHref[i]
-            }
-            
-        }
+        document.getElementById('productTitle').innerText = productTitle 
+        console.log(productTitle)
     }
     else{
-        
-        productTitle = 'Product: N/A'
+
     }
-    document.getElementById('productTitle').innerText = productTitle.replaceAll('-', ' ') 
-    console.log(productTitle, tabHref)
 });
 
 
